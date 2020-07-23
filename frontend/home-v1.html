@@ -2270,9 +2270,33 @@
                                                                 </div>
                                                             </div>
                                                             <div class="res-box text-center mt-30">
-                                                                <button type="submit" class="btn v8"><span class="lnr lnr-exit"></span> Log In</button>
+                                                                <button onclick="loginAccount()" type="button" class="btn v8"><span class="lnr lnr-exit"></span> Log In</button>
                                                             </div>
                                                         </form>
+                                                        <script>
+                                                            function loginAccount()
+                                                            {
+                                                                var url = "http://localhost:3000/api/login";
+                                                                let data = {};
+                                                                data.username = document.getElementById('username').value;
+                                                                data.password = document.getElementById('password').value;
+                                                                let json = JSON.stringify(data);
+                                                                var xhr = new XMLHttpRequest();
+                                                                xhr.open("GET", url+"/"+data.username+"/"+data.password, true);
+                                                                xhr.setRequestHeader('Content-type','application/json; charset=utf-8');
+                                                                xhr.onload = function () {
+                                                                    console.log(xhr.responseText);
+                                                                    var users = JSON.parse(xhr.responseText);
+                                                                    if (xhr.readyState == 4 && xhr.status == "200") {
+                                                                        // alert ('Success');
+                                                                        console.table(users);
+                                                                    } else {
+                                                                        console.error(users);
+                                                                    }
+                                                                }
+                                                                xhr.send(json);
+                                                            }
+                                                        </script>
                                                         <div class="social-profile-login  text-left mt-20">
                                                             <h5>or Login with</h5>
                                                             <ul class="social-btn">
@@ -2312,7 +2336,7 @@
                                                                 <label for="remember">I've read and accept terms &amp; conditions</label>
                                                             </div>
                                                             <div class="res-box text-center mt-30">
-                                                                <button type="submit" class="btn v8" id="registerButton" onclick="registerUser()"><i class="lnr lnr-enter"></i>Sign Up</button>
+                                                                <button type="button" class="btn v8" id="registerButton" onclick="registerUser()"><i class="lnr lnr-enter"></i>Sign Up</button>
                                                             </div>
                                                         </form>
                                                         <script>
@@ -2330,12 +2354,11 @@
                                                                 xhr.onload = function () {
                                                                     console.log(xhr.responseText);
                                                                     var users = JSON.parse(xhr.responseText);
-                                                                    if (xhr.readyState == 4 && xhr.status == "201") {
-                                                                        alert ('Success')
+                                                                    if (xhr.readyState == 4 && xhr.status == "200") {
+                                                                        // alert ('Success');
                                                                         console.table(users);
                                                                     } else {
                                                                         console.error(users);
-                                                                        alert(users.message);
                                                                     }
                                                                 }
                                                                 xhr.send(json);
