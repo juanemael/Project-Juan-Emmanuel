@@ -4,9 +4,9 @@ const app = express();
 app.use(express.json());
 
 const users = [
-    {id: 1, username:'alvin', email: 'alvin@1.id', password: 'a1', status: 1},
-    {id: 2, username:'barney', email: 'barney@2.id', password: 'b2', status: 1},
-    {id: 1, username:'cop', email: 'cop@3.id', password: 'c3', status: 1}
+    {id: 1, username:'alvin', email: 'alvin@1.id', password: 'a123', status: 1},
+    {id: 2, username:'barney', email: 'barney@2.id', password: 'b123', status: 1},
+    {id: 1, username:'cop', email: 'cop@3.id', password: 'c123', status: 1}
 ];
 
 app.use((req, res, next) => {
@@ -56,13 +56,13 @@ app.post('/api/users', (req, res)=>{
     console.log(users);
 })
 
-app.get('/api/users/:email/:password',(req,res)=>{
+app.get('/api/login/:email/:password',(req,res)=>{
     var datetime = new Date();
     console.log('\n'+datetime)
     console.log("Incoming new GET HTTP request for LOGIN");
     console.log(req.body);
 
-    const {error} = validateUsers(req.params);
+    const {error} = validateLogin(req.params);
     if(error){
         console.log('Validation error');
         var jsonRespond = {
@@ -75,7 +75,7 @@ app.get('/api/users/:email/:password',(req,res)=>{
     console.log('Validation success and accepted');
     console.log('Check existing email: '+req.params.email+' and password: '+req.params.password);
 
-    const checkUser = users.find(u => u.email === req.params.email +' and password: '+req.params.password);
+    const checkUser = users.find( u => u.email === req.params.email && u.password === req.params.password );
     if (!checkUser) {
         var error_message = 'Invalid login detail. Email or password is not correct.';
         console.log(error_message);
@@ -103,12 +103,20 @@ app.get('/api/users', (req,res)=>{
 
 function validateUsers(users){
     const schema = Joi.object({
-        username : Joi.string().min(3).required(),
-        email: Joi.string().email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } }),
-        password: Joi.string().min(3).required(),
+        username: Joi.string().min(3),
+        email: Joi.string().email({ minDomainSegments: 2, tlds: { allow: ['com', 'net', 'id'] } }),
+        password: Joi.string().min(3),
         agreement_status: Joi.required()
     });
 
+    return schema.validate(users);
+}
+
+function validateLogin(users){
+    const schema = Joi.object({
+        email: Joi.string().email({minDomainSegments: 2, tlds: {allow: ['com','net','id']}}),
+        password: Joi.string().min(3)
+    })
     return schema.validate(users);
 }
 

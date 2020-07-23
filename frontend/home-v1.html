@@ -2251,7 +2251,7 @@
                                                     <div class="col-md-6">
                                                         <form id="login-form" action="#" method="post">
                                                             <div class="form-group">
-                                                                <input type="text" name="username" id="username" tabindex="1" class="form-control" placeholder="email" value="" required="">
+                                                                <input type="text" name="email" id="email" tabindex="1" class="form-control" placeholder="email" value="" required="">
                                                             </div>
                                                             <div class="form-group">
                                                                 <input type="password" name="password" id="password" tabindex="2" class="form-control" placeholder="Password">
@@ -2278,11 +2278,11 @@
                                                             {
                                                                 var url = "http://localhost:3000/api/login";
                                                                 let data = {};
-                                                                data.username = document.getElementById('username').value;
+                                                                data.email = document.getElementById('email').value;
                                                                 data.password = document.getElementById('password').value;
                                                                 let json = JSON.stringify(data);
                                                                 var xhr = new XMLHttpRequest();
-                                                                xhr.open("GET", url+"/"+data.username+"/"+data.password, true);
+                                                                xhr.open("GET", url+"/"+data.email+"/"+data.password, true);
                                                                 xhr.setRequestHeader('Content-type','application/json; charset=utf-8');
                                                                 xhr.onload = function () {
                                                                     console.log(xhr.responseText);
