@@ -1,6 +1,7 @@
 const express = require('express');
 const app = express();
 const multer = require('multer');
+const Joi = require('joi');
 const path = require('path');
 
 app.set('view engine', 'ejs')
@@ -60,22 +61,28 @@ app.post('/api/add_property', (req,res)=>{
 
 app.put('/api/props/:id', (req,res)=>{
 
-    const checkProp = props.find( p => p.id === req.body.id);
+    var opt = parseInt(req.body.option);
+    const {error} = validateProps(req.body);
+    if( error ){
+        // 400 Bad Request
+        return res.status(400).send(error.details[0].message);
+    }
+    const checkProp = props.find( p => p.id === parseInt(req.body.id));
     if (!checkProp) return res.status(404).send('ID: '+req.body.id+ ' not found.');
-    if(req.body.opt === "1")
+    if(opt === 1)
     {
         checkProp.prop_title = req.body.content;
         return res.send(checkProp);
-    } else if(req.body.opt === "2"){
+    } else if(opt === 2){
         checkProp.prop_address = req.body.content;
         return res.send(checkProp);
-    } else if(req.body.opt === "3"){
+    } else if(opt === 3){
         checkProp.prop_neighborhood = req.body.content;
         return res.send(checkProp);
-    } else if(req.body.opt === "4"){
+    } else if(opt === 5){
         checkProp.country = req.body.content;
         return res.send(checkProp);
-    } else if(req.body.opt === "5"){
+    } else if(opt === 6){
         checkProp.state = req.body.content;
         return res.send(checkProp);
     }
@@ -99,6 +106,16 @@ app.delete('/api/props/:id',(req,res)=>{
     // RETURN DELETED COURSE
     return res.send(prop);
 })
+
+function validateProps(course){
+    const schema = Joi.object({
+        id: Joi.required(),
+        content: Joi.string().min(3).required(),
+        option: Joi.required()
+    });
+
+    return schema.validate(course);
+}
 
 app.listen(port, () => {
     console.log(`Listening on port ${port} ...`)
