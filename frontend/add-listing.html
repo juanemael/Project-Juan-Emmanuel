@@ -230,9 +230,9 @@
                             <li class="nav-item active">
                                 <a data-toggle="tab" href="#general_info">General Information</a>
                             </li>
-                            <li class="nav-item ">
-                                <a data-toggle="tab" href="#gallery">Gallery</a>
-                            </li>
+<!--                            <li class="nav-item ">-->
+<!--                                <a data-toggle="tab" href="#gallery">Gallery</a>-->
+<!--                            </li>-->
 <!--                            <li class="nav-item">-->
 <!--                                <a data-toggle="tab" href="#pp_details">Property Details</a>-->
 <!--                            </li>-->
@@ -325,29 +325,72 @@
                                             </div>
                                         </form>
                                     </div>
-                                </div>
-                            </div>
-                            <div class="tab-pane fade" id="gallery">
-                                <h4><i class="lnr lnr-picture"></i> Gallery :</h4>
-                                <div class="row">
-                                    <div class="col-md-12 mb-5">
-                                        <div class="form-group">
-                                            <form class="photo-upload">
-                                                <div class="form-group">
-                                                    <div class="add-listing__input-file-box">
-                                                        <input class="add-listing__input-file" type="file" name="file" id="prop_image">
-                                                        <div class="add-listing__input-file-wrap">
-                                                            <i class="lnr lnr-cloud-upload"></i>
-                                                            <p>Click here to upload your images</p>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </form>
-                                        </div>
-                                        <div class="add-btn">
-                                            <a href="#" class="btn v3">Add Images</a>
+                                    <div class="col-md-6 text-left">
+                                        <div class="res-box mt-10">
+                                            <input type="checkbox" tabindex="3" class="" name="remember" id="remember">
+                                            <label for="remember">I've read and accept <a href="terms.html">terms &amp; conditions</a></label>
                                         </div>
                                     </div>
+                                    <div class="col-md-6 text-right sm-left">
+                                        <button class="btn v3" type="submit">Preview</button>
+                                        <button onclick="addProperty()" class="btn v3" type="button" >Submit</button>
+                                        <script>
+                                            function addProperty() {
+                                                var url = "http://localhost:3000/api/add_property";
+                                                let data = {}
+                                                data.prop_title = document.getElementById('prop-title').value;
+                                                data.prop_address = document.getElementById('prop-address').value;
+                                                data.prop_neighborhood = document.getElementById('prop-neighborhood').value;
+                                                data.country = document.getElementById('country').value;
+                                                data.state = document.getElementById('state').value;
+                                                data.city = document.getElementById('city').value;
+                                                data.zip = document.getElementById('zip').value;
+                                                data.prop_type = document.getElementById('prop_type').value;
+                                                data.prop_status = document.getElementById('prop_status').value;
+                                                data.price = document.getElementById('price').value;
+                                                data.list_info = document.getElementById('list_info').value;
+
+                                                var json = JSON.stringify(data);
+                                                var xhr = new XMLHttpRequest();
+                                                xhr.open("POST", url, true);
+                                                xhr.setRequestHeader('Content-type','application/json; charset=utf-8');
+                                                xhr.onload = function () {
+                                                    console.log(xhr.responseText);
+                                                    var users = JSON.parse(xhr.responseText);
+                                                    if (xhr.readyState == 4 && xhr.status == "200") {
+                                                        // alert ('Success');
+                                                        console.table(users);
+                                                    } else {
+                                                        console.error(users);
+                                                    }
+                                                }
+                                                xhr.send(json);
+                                            }
+                                        </script>
+                                    </div>
+                                </div>
+                            </div>
+<!--                            <div class="tab-pane fade" id="gallery">-->
+<!--                                <h4><i class="lnr lnr-picture"></i> Gallery :</h4>-->
+<!--                                <div class="row">-->
+<!--                                    <div class="col-md-12 mb-5">-->
+<!--                                        <div class="form-group">-->
+<!--                                            <form class="photo-upload">-->
+<!--                                                <div class="form-group">-->
+<!--                                                    <div class="add-listing__input-file-box">-->
+<!--                                                        <input class="add-listing__input-file" type="file" name="file" id="prop_image">-->
+<!--                                                        <div class="add-listing__input-file-wrap">-->
+<!--                                                            <i class="lnr lnr-cloud-upload"></i>-->
+<!--                                                            <p>Click here to upload your images</p>-->
+<!--                                                        </div>-->
+<!--                                                    </div>-->
+<!--                                                </div>-->
+<!--                                            </form>-->
+<!--                                        </div>-->
+<!--                                        <div class="add-btn">-->
+<!--                                            <a href="#" class="btn v3">Add Images</a>-->
+<!--                                        </div>-->
+<!--                                    </div>-->
 <!--                                    <div class="col-md-12 mt-30">-->
 <!--                                        <label>Property Video Link</label>-->
 <!--                                        <input type="text" class="form-control filter-input" placeholder="https://www.youtube.com/watch?v=dqD0SqMNtks">-->
@@ -355,8 +398,8 @@
 <!--                                            <a href="#" class="btn v3 mt-30">Add Video</a>-->
 <!--                                        </div>-->
 <!--                                    </div>-->
-                                </div>
-                            </div>
+<!--                                </div>-->
+<!--                            </div>-->
 <!--                            <div class="tab-pane fade" id="f_plan">-->
 <!--                                <h4><i class="lnr lnr-map"></i>Floor Plans :</h4>-->
 <!--                                <div class="row">-->
@@ -517,71 +560,29 @@
 <!--                                    </div>-->
 <!--                                </div>-->
 <!--                            </div>-->
-                            <div class="tab-pane fade" id="social_network">
-                                <h4><i class="fas fa-share-alt-square"></i>Social Networks:</h4>
-                                <div class="row">
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <label>Facebook link (Optional)</label>
-                                            <input type="text" class="form-control filter-input" placeholder="Facebook url">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <label>Pinterest (Optional)</label>
-                                            <input type="text" class="form-control filter-input" placeholder="Pinterest url">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-4">
-                                        <div class="form-group">
-                                            <label>Twitter link (Optional)</label>
-                                            <input type="text" class="form-control filter-input" placeholder="Twitter url">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6 text-left">
-                                        <div class="res-box mt-10">
-                                            <input type="checkbox" tabindex="3" class="" name="remember" id="remember">
-                                            <label for="remember">I've read and accept <a href="terms.html">terms &amp; conditions</a></label>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6 text-right sm-left">
-                                        <button class="btn v3" type="submit">Preview</button>
-                                        <button onclick="addProperty()" class="btn v3" type="button" >Submit</button>
-                                        <script>
-                                            function addProperty() {
-                                                var url = "http://localhost:3000/api/add_property";
-                                                let data = {}
-                                                data.prop_title = document.getElementById('prop-title').value;
-                                                data.prop_address = document.getElementById('prop-address').value;
-                                                data.prop_neighborhood = document.getElementById('prop-neighborhood').value;
-                                                data.country = document.getElementById('country').value;
-                                                data.state = document.getElementById('state').value;
-                                                data.city = document.getElementById('city').value;
-                                                data.zip = document.getElementById('zip').value;
-                                                data.prop_type = document.getElementById('prop_type').value;
-                                                data.prop_status = document.getElementById('prop_status').value;
-                                                data.price = document.getElementById('price').value;
-                                                data.list_info = document.getElementById('list_info').value;
-                                                data.prop_image = document.getElementById('prop_image').value;
+<!--                            <div class="tab-pane fade" id="social_network">-->
+<!--                                <h4><i class="fas fa-share-alt-square"></i>Social Networks:</h4>-->
+<!--                                <div class="row">-->
+<!--                                    <div class="col-md-4">-->
+<!--                                        <div class="form-group">-->
+<!--                                            <label>Facebook link (Optional)</label>-->
+<!--                                            <input type="text" class="form-control filter-input" placeholder="Facebook url">-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                    <div class="col-md-4">-->
+<!--                                        <div class="form-group">-->
+<!--                                            <label>Pinterest (Optional)</label>-->
+<!--                                            <input type="text" class="form-control filter-input" placeholder="Pinterest url">-->
+<!--                                        </div>-->
+<!--                                    </div>-->
+<!--                                    <div class="col-md-4">-->
+<!--                                        <div class="form-group">-->
+<!--                                            <label>Twitter link (Optional)</label>-->
+<!--                                            <input type="text" class="form-control filter-input" placeholder="Twitter url">-->
+<!--                                        </div>-->
+<!--                                    </div>-->
 
-                                                var json = JSON.stringify(data);
-                                                var xhr = new XMLHttpRequest();
-                                                xhr.open("POST", url, true);
-                                                xhr.setRequestHeader('Content-type','application/json; charset=utf-8');
-                                                xhr.onload = function () {
-                                                    console.log(xhr.responseText);
-                                                    var users = JSON.parse(xhr.responseText);
-                                                    if (xhr.readyState == 4 && xhr.status == "200") {
-                                                        // alert ('Success');
-                                                        console.table(users);
-                                                    } else {
-                                                        console.error(users);
-                                                    }
-                                                }
-                                                xhr.send(json);
-                                            }
-                                        </script>
-                                    </div>
+
                                 </div>
                             </div>
                         </div>
