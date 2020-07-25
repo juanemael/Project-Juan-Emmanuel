@@ -327,14 +327,22 @@
             <div class="col-lg-3 col-sm-5 col-5">
                 <div class="container">
                     <h2>Publisher Search List</h2>
+                    <div class="row">
+                    <input type="text" name="place-event" id="searchProp" placeholder="Search ID..">
+                        <div class="pl-30 pr-0">
+                            <button class="btn v3" onclick="searchProps()">SEARCH</button>
+                        </div>
+                    <div class="pl-30 pr-0">
+                    <button class="btn v3" onclick="getProps()">SHOW ALL</button>
+                    </div></div>
                     <table class="table table-striped" id="show">
 
                     </table>
 
                     <script>
-                        function getData()
+                        function getProps()
                         {
-                            var url = "http://localhost:3000/api/courses";
+                            var url = "http://localhost:3000/api/props";
                             var xhr  = new XMLHttpRequest();
                             var content = "<tr><th>ID</th><th>Prop Title</th><td>prop_address</td><td>prop_neighbor</td><td>country</td><td>state</td><td>city</td><td>zip</td><td>prop_type</td><td>prop_status</td><td>price</td><td>list_info</td></tr>";
                             xhr.open('GET', url, true);
@@ -342,8 +350,26 @@
                                 var props = JSON.parse(xhr.responseText);
                                 if (xhr.readyState == 4 && xhr.status == "200") {
                                     props.forEach((data) => {
-                                        content += "<tr><td>" + data.id + "</td><td>" + data.name + "</td></tr>";
+                                        content += "<tr><td>" + data.id + "</td><td>" + data.prop_title + "</td><td>" + data.prop_address + "</td><td>" + data.prop_neighborhood + "</td><td>" + data.country + "</td><td>" + data.state + "</td><td>" + data.city + "</td><td>" + data.zip + "</td><td>" + data.prop_type + "</td><td>" + data.prop_status + "</td><td>" + data.price + "</td><td>" + data.list_info + "</td></tr>";
                                     })
+                                    document.getElementById('show').innerHTML = content;
+                                } else {
+                                    console.error(props);
+                                }
+                            }
+                            xhr.send(null);
+                        }
+                        function searchProps() {
+                            var url = "http://localhost:3000/api/props";
+                            let prop_data = {}
+                            prop_data.id = document.getElementById('searchProp').value;
+                            var xhr  = new XMLHttpRequest();
+                            var content = "<tr><th>ID</th><th>Prop Title</th><td>prop_address</td><td>prop_neighbor</td><td>country</td><td>state</td><td>city</td><td>zip</td><td>prop_type</td><td>prop_status</td><td>price</td><td>list_info</td></tr>";
+                            xhr.open('GET', url+"/"+prop_data.id, true);
+                            xhr.onload = function() {
+                                var data = JSON.parse(xhr.responseText);
+                                if (xhr.readyState == 4 && xhr.status == "200") {
+                                        content += "<tr><td>" + data.id + "</td><td>" + data.prop_title + "</td><td>" + data.prop_address + "</td><td>" + data.prop_neighborhood + "</td><td>" + data.country + "</td><td>" + data.state + "</td><td>" + data.city + "</td><td>" + data.zip + "</td><td>" + data.prop_type + "</td><td>" + data.prop_status + "</td><td>" + data.price + "</td><td>" + data.list_info + "</td></tr>";
                                     document.getElementById('show').innerHTML = content;
                                 } else {
                                     console.error(props);

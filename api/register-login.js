@@ -1,6 +1,7 @@
 const Joi = require('joi');
 const express = require('express');
 const app = express();
+const mysql = require('mysql');
 app.use(express.json());
 
 const users = [
@@ -16,6 +17,13 @@ app.use((req, res, next) => {
         'Access-Control-Allow-Headers' : '*'
     });
     next();
+});
+
+var con = mysql.createConnection({
+    host: "localhost",
+    user: "root",
+    password: "",
+    database: "mydb"
 });
 app.post('/api/users', (req, res)=>{
     const {error} = validateUsers(req.body);
@@ -43,7 +51,12 @@ app.post('/api/users', (req, res)=>{
     }
 
     console.log('Email ' + req.body.email + ' is available for registration');
-
+    let sql = "INSERT INTO users(username,email,password,status) VALUES('"+req.body.username+"','"+req.body.email+"','"+req.body.password+"','"+req.body.agreement_status+"')";
+    con.query(sql, (err,results) =>{
+        if(err) throw err
+        console.log("ACCOUNT REGISTERED !")
+        res.send(results)
+    })
     const user = {
         id: users.length + 1,
         username: req.body.username,
@@ -52,8 +65,8 @@ app.post('/api/users', (req, res)=>{
         status: req.body.agreement_status
     }
     users.push(user);
-    res.send(user)
-    console.log(users);
+    // res.send(user)
+    // console.log(users);
 })
 
 app.get('/api/login/:email/:password',(req,res)=>{
