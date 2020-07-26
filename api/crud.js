@@ -40,15 +40,15 @@ app.use((req, res, next) => {
 });
 
 app.get('/api/props/:id',(req,res)=>{
-    // const prop = props.find( p => p.id === parseInt(req.params.id) );
-    // if (!prop) return res.status(404).send('ID not found.');
+    const prop = props.find( p => p.id === parseInt(req.params.id) );
+    if (!prop) return res.status(404).send('ID not found.');
     let sql = "SELECT * from crud WHERE id='"+parseInt(req.params.id)+"'";
     con.query(sql, (err,results) =>{
         if(err) throw err
         console.log("GET ACCOUNT ID: '"+req.params.id+"' NOW !");
-        return res.send(results);
+        // return res.send(results);
     })
-    // return res.send(prop);
+    return res.send(prop);
 })
 
 app.get('/api/props',(req,res)=>{
